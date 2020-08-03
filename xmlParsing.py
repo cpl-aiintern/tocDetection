@@ -1,13 +1,17 @@
+from re import split
 import xml.etree.ElementTree as ET
 import math
 import re
+import os
 
 tocKeyWords = ['contents','table of contents','chapters','sections']
 
-def main():
-    tree = ET.parse("xmlData/Response to Feedback Received on the Proposed Framework for Variable Capital Companies Part 3.xml")
+def fontList():
+    pass
+
+def findTOCpage(filename):
+    tree = ET.parse(os.path.join("xmlData",filename))
     root = tree.getroot()
-    found = False
     totalPages = len(root.findall('page'))
     pagesToBeConsidered = math.ceil(totalPages*30/100)
     for page in range(pagesToBeConsidered):
@@ -21,13 +25,21 @@ def main():
                     else:
                         tempLine+=" "
                 for keywords in tocKeyWords:
-                    if re.search(keywords,tempLine.lower()):
-                        print("Table of contents is located at",page+1)
-                        found = True
-                        break
-                if found: break
-            if found: break
-        if found: break
+                    if re.search(keywords,tempLine.lower()) and len(tempLine)<30:
+                        return page+1
+    print("No Table of content found")
+
+def main():
+    xmlFiles = os.listdir('xmlData')
+
+    if not os.path.exists('xmlData'):
+        print("Please first convert the pdf data to XML")
+        return
+    
+    for file in xmlFiles:
+        page = findTOCpage(file)
+        if page:
+            print("TOC is located at %s in document %s"%(page,".".join(file.split(".")[:-1])))
         
 if __name__ == '__main__':
     main()
