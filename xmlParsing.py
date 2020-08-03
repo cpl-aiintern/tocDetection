@@ -29,6 +29,27 @@ def findTOCpage(filename):
                         return page+1
     print("No Table of content found")
 
+def font_list(filename):
+    font_family = []
+    font_size = []
+    tree = ET.parse(os.path.join("xmlData",filename))
+    root = tree.getroot()
+    totalPages = len(root.findall('page'))
+    pagesToBeConsidered = math.ceil(totalPages*30/100)
+    for page in range(pagesToBeConsidered):
+        pageElement = root[page]
+        for box in pageElement.findall('textbox'):
+            for line in box.findall('textline'):
+                for text in line.findall('text'):
+                    if 'font' in text.attrib and text.attrib['font'] not in font_family:
+                        font_family.append(text.attrib['font'])
+                    if 'size' in text.attrib and text.attrib['size'] not in font_size:
+                        font_size.append(text.attrib['size'])
+    print("Font families:",font_family)
+    print()
+    print("Font sizes",font_size)
+    print("\n")
+
 def main():
     xmlFiles = os.listdir('xmlData')
 
