@@ -43,12 +43,9 @@ def font_list(filename):
                 for text in line.findall('text'):
                     if 'font' in text.attrib and text.attrib['font'] not in font_family:
                         font_family.append(text.attrib['font'])
-                    if 'size' in text.attrib and text.attrib['size'] not in font_size:
-                        font_size.append(text.attrib['size'])
-    print("Font families:",font_family)
-    print()
-    print("Font sizes",font_size)
-    print("\n")
+                    if 'size' in text.attrib and float(text.attrib['size']) not in font_size:
+                        font_size.append(float(text.attrib['size']))
+    return font_family,font_size
 
 def main():
     xmlFiles = os.listdir('xmlData')
