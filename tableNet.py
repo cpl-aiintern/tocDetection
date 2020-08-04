@@ -1,7 +1,6 @@
 import tensorflow as tf
 import tensorflow.keras as keras
 import tensorflow.keras.backend as K
-from tensorflow import keras as keras
 from tensorflow.keras.models import Model
 from tensorflow.keras.applications import VGG19
 from tensorflow.keras.layers import (Add, Conv2D, Conv2DTranspose, Dropout,
